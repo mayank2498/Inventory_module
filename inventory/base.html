@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load static %}
+      <link type="text/css" rel="stylesheet" href="/static/materialize/css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="/static/materialize/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/inventory/js/purchase.js"></script>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+       .thumbnail img {
+    height:250px;
+    width:100%;
+}
+    </style>
+</head>
+<body style="overflow-y:auto;background: url('/media/restaurant_icons.png') repeat">
+<div class="header green darken-9">
+        <p style="float: left; width:100%;color:black;padding-left: 1%;font-size: 3vmin; margin-top: 0%;padding-top: 1%;padding-right:1%;display: inline" class="background green darken-3">
+            <span style="float: left"><img src="/media/developers/veg_world_logo.png" style="height:12vmin;width:12vmin;"></span>
+            <span>         </span>
+            <span><b><i>INVENTORY</i></b></span>
+            <span style="float: right">
+                Welcome <strong>{{ user.username }}</strong>
+                <a href="#" style="color: black">Logout</a></span>
+        </p>
+</div>
+{% block body %}
+{% endblock %}
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <title>Title</title>
+</head>
+<body ng-app="myapp" ng-controller="myctrl">
+<select title="Select an option">
+                                 <option value="volvo">Volvo</option>
+                                 <option value="saab">Saab</option>
+                                 <option value="mercedes">Mercedes</option>
+                                 <option value="audi">Audi</option>
+                             </select>
+    {{ age }}
+
+    <p ng-bind="angularvar"></p>
+
+
+
+<script>
+    var app = angular.module('myapp',[]);
+    app.controller('myctrl',function($scope){
+        $scope.angularvar = {{ age }} ;
+    });
+
+</script>
+
+</body>
+</html>

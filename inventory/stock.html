@@ -1,0 +1,118 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Stocks{% endblock %}
+{% block body %}
+<style>
+h5 {
+    font-size: 16px;
+    color : #000000
+}
+.nav-tabs{
+  background-color:green;
+}
+.tab-content{
+    background-color:#303136;
+    color:#e68a00;
+    padding:5px
+}
+.nav-tabs > li > a{
+  border: medium none;
+}
+.nav-tabs > li > a:active,
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus,
+.nav-tabs > li > a:selection{
+  background-color: #e68a00;
+}
+</style>
+<ul class="nav nav-tabs">
+    <li class="{% if  subcategoryid ==  0 %}active{% endif %}"><a href="{% url 'inventory:getstock' 0 %}">
+        <h4 style="color:{% if subcategoryid == 0 %}green{% endif %}{% if subcategoryid != 0 %}black{% endif %}"><b>All Products</b></h4></a>
+    </li>
+  {% for category in categories %}
+  <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <h5><b>{{ category.name }}
+    <span class="caret"></span></b></h5></a>
+    <ul class="dropdown-menu">
+    {% for subcategory in subcategories %}
+        {% if subcategory.category_id == category.id %}
+            <li><a href="{% url 'inventory:getstock' subcategory.id %}"><h5><b>{{ subcategory.name }}</b></h5></a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+  </li>
+  {% endfor %}
+</ul>
+<br><br>
+    {% for category in categories %}
+    {% for subcategory in subcategories %}
+    {% if subcategory.id == subcategoryid and subcategory.category_id == category.id %}
+        <h2 align="center">{{ category.name }} : {{ subcategory.name }}</h2>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+<div ng-app="stock">
+<h4 ng-bind="categoryname"></h4> : <h4 ng-bind="subcategoryname"></h4>
+{% verbatim %}
+<div class="row" ng-controller="myctrl">
+    <div class="col-sm-3" ng-repeat="object in object_list">
+         <div class="thumbnail">
+            <img src="{{ object.image }}">
+            <div class="caption">
+                <h4 align="center">{{ object.name }}</h4>
+                <strong><h3 align="center">Stock left : {{ object.units }} {{ object.measured_unit }}</h3></strong>
+                <h3 align="center">
+                </h3>
+            </div>
+         </div>
+    </div>
+</div>
+{% endverbatim %}
+    <!-- Begin angular script -->
+    <script>
+        var app = angular.module('stock',[]);
+        var url = "http://127.0.0.1:8000/inventory/stockjson";
+
+        app.controller('myctrl', function ($scope, $http) {
+            $scope.object_list = [];
+            $scope.id = {{ subcategoryid }};
+            $http.get(url).then(function(response){
+                var i = 0;
+                $scope.myData = response.data;
+
+                angular.forEach($scope.myData,function(object) {
+                if ($scope.id == 0 || object.fields['subcategory_id']==$scope.id) {
+                    $scope.object_list[i] = {
+                        'units': object.fields['units'],
+                        'name': object.fields['name'],
+                        'image': object.fields['image'],
+                        'measured_unit': object.fields['measured_unit']
+                    };
+                    i += 1;
+                }
+                });
+            });
+            setInterval(function() {
+                i = 0;
+                $http.get(url).then(function(response) {
+                    $scope.myData = response.data;
+                    angular.forEach($scope.myData, function(object) {
+                        if ($scope.id == 0 || object.fields['subcategory_id']==$scope.id) {
+                    $scope.object_list[i] = {
+                        'units': object.fields['units'],
+                        'name': object.fields['name'],
+                        'image': object.fields['image'],
+                        'measured_unit': object.fields['measured_unit']
+                    };
+                    i += 1;
+                }
+                });
+                },function(){
+                    alert('something went wrong');
+                });
+
+            },15000);
+        });
+    </script>
+
+{% endblock %}
